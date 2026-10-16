@@ -8,9 +8,10 @@ Built with **FastAPI + SQLite + vanilla HTML/CSS/JS**. AI is powered by
 **Groq** (primary: `qwen/qwen3.8-27b`, fallback: `openai/gpt-oss-120b`). Everything
 still works offline thanks to built-in question banks.
 
-> This folder (`SchemaWise-AI-Enhanced-v2`) is the **Enhanced** build plus a fifth
-> section — **V. Learn, Download & Help**: eight working lessons, six in-browser
-> exports and a troubleshooting FAQ. Sections I–IV are unchanged.
+> This repository is the **Enhanced** build — published as
+> [`nannanvp/SchemaWise-AI-Enhanced`](https://github.com/nannanvp/SchemaWise-AI-Enhanced) —
+> plus a fifth section: **V. Learn, Download & Help**, with eight working lessons, six
+> in-browser exports and a troubleshooting FAQ. Sections I–IV are unchanged.
 
 ---
 
@@ -81,13 +82,21 @@ still works offline thanks to built-in question banks.
 
 ## 🚀 Run locally (Windows)
 
+```bat
+git clone https://github.com/nannanvp/SchemaWise-AI-Enhanced.git
+cd SchemaWise-AI-Enhanced
+START_PROJECT.bat
+```
+
+Step by step:
+
 1. Install Python 3.10+.
 2. Double-click **`START_PROJECT.bat`** (creates a virtual environment, installs
    dependencies and starts the server).
 3. Open **http://127.0.0.1:8001**.
 
-> This copy listens on **8001** so it can be started beside the original build, which
-> keeps **8000**.
+> This build listens on **8001** so it can run beside the original SchemaWise build,
+> which keeps **8000**.
 
 ### Manual start
 ```bat
