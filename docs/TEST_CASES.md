@@ -143,3 +143,10 @@ Run a review, then press **Download Report** in the command bar.
 `<name> — Schema Review Report`, using the site name from `project_name.txt` — not the
 pre-rename title. (Found on the live deployment, where the file still opened with the
 old `AI-Based` heading.)
+### Test 36 — Malformed findings cannot crash the tutor
+POST `/api/ai-explain` with `findings: [{}]` or `findings: ["x"]`.
+**Expected:** HTTP 200 with a normal response — invalid items are skipped, never a 500.
+### Test 37 — Oversized inputs are refused, not forwarded
+POST `/api/quiz/generate` with a 2 000-character topic. **Expected:** HTTP 422.
+A schema under 100 KB is still accepted, and the tutor prompt carries at most the
+first 12 000 characters of its SQL.

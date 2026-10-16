@@ -29,8 +29,11 @@ async function api(path, options) {
   let data = null;
   try { data = await res.json(); } catch { /* ignore */ }
   if (!res.ok) {
-    const detail = (data && (data.detail || data.message)) || `Request failed (${res.status})`;
-    throw new Error(detail);
+    const raw = data && (data.detail || data.message);
+    const detail = Array.isArray(raw)
+      ? raw.map((d) => (d && d.msg) || "").filter(Boolean).join("; ")
+      : raw;
+    throw new Error(detail || `Request failed (${res.status})`);
   }
   return data;
 }
