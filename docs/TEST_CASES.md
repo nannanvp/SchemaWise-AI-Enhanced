@@ -109,25 +109,31 @@ With the app using the built-in bank (no Groq key), export *Practice paper*.
 **Expected:** a Markdown file whose Part 1 lists the bank's questions with their
 options and an answer line each, and whose Part 2 gives the letter and the solution
 for every one.
-### Test 30 — Print
+### Test 30 — Help steps read as prose, not one word per line
+Open section V and read **Start here** and **A revision routine that works**.
+**Expected:** each step is a normal paragraph of two or three lines with its roman
+numeral in the left gutter; inline markup (`<b>`, `.mono`) stays on the text line.
+The step list must not be a grid: a `display: grid` `<li>` turns every inline element
+and text run into its own grid cell, which renders one fragment per line.
+### Test 31 — Print
 With section V open, open the browser's print preview.
 **Expected:** flat ink-on-white output; download buttons and the `+`/`–` marks are
 gone; sidebar, command bar and other app furniture removed.
 
 ## Naming and models
-### Test 31 — Renaming the site
+### Test 32 — Renaming the site
 Edit the single line in `project_name.txt` (for example to `Quiz Studio`) and reload
 the page.
 **Expected:** the masthead wordmark, the browser-tab title and the Help panel show the
 new name — its last word keeps the italic accent — with no restart and no code change.
 `GET /api/project-name` returns `{"name":"Quiz Studio"}` and `GET /api/config` reports
 the same value in `app`. Restore `SchemaWise AI` afterwards.
-### Test 32 — Model chain in the status chip
+### Test 33 — Model chain in the status chip
 Hover the AI status chip with a Groq key configured.
 **Expected:** the tooltip reads
 `Groq AI is available · qwen/qwen3.8-27b → openai/gpt-oss-120b`; without a key it reads
 `AI unavailable - using built-in banks`.
-### Test 33 — Exports carry the site name
-Rename the site (as in test 31), then export *Study guide* and the designer `.sql`.
+### Test 34 — Exports carry the site name
+Rename the site (as in test 32), then export *Study guide* and the designer `.sql`.
 **Expected:** the Markdown starts with `# <name> — DBMS study guide` and the SQL
 comment reads `-- Designed in <name> · <date>`.

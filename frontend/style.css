@@ -1750,20 +1750,26 @@ body.dark .segmented button.active { color: var(--accent); }
   border-top: 1px solid var(--rule);
 }
 .help-steps li {
+  position: relative;
   counter-increment: helpstep;
-  display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
-  gap: 10px;
-  padding: 10px 0;
+  padding: 10px 0 10px 30px;
   border-bottom: 1px solid var(--rule);
   font-size: 13.5px;
   line-height: 1.6;
   color: var(--ink-2);
 }
+/* The numeral sits in the left gutter. It is positioned rather than placed in a
+   grid cell, so that inline markup inside a step (<b>, .mono) stays on the
+   text line instead of becoming a grid item of its own. */
 .help-steps li::before {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 22px;
   content: counter(helpstep, upper-roman) ".";
   font-family: var(--mono);
   font-size: 11px;
+  line-height: 21.6px;
   letter-spacing: .06em;
   color: var(--muted);
 }
@@ -1981,7 +1987,7 @@ body.dark .segmented button.active { color: var(--accent); }
   .panel { padding: 16px 15px; }
   .lesson-name { font-size: 14px; }
   .lesson-body { padding-left: 18px; }
-  .help-steps li { grid-template-columns: 24px minmax(0, 1fr); gap: 8px; }
+  .help-steps li { padding-left: 24px; }
   .help-table th,
   .help-table td { padding-right: 10px; }
   .help-table td { max-width: none; }

@@ -91,3 +91,10 @@ rather than for its operator:
 - Static contracts re-checked by script: ids referenced by `app.js` exist in the
   HTML, every `data-export` has a builder and a `data-meta` line, every new class has
   a CSS rule, the CSS section numbers stay in order, and no pictographs were added.
+- Layout defect found after the rebuild and fixed: `.help-steps li` was a two-column
+  grid (`30px minmax(0, 1fr)`), so the `<b>` and `.mono` markup inside the new step
+  text became grid items and each fragment landed on its own line — a single step
+  measured 872px tall. The numeral is now absolutely positioned in a left gutter
+  (`.help-steps li { padding-left: 30px }`), which keeps the step as one prose block;
+  the same step now measures 64–86px. Rule 11 of the design system records the
+  general constraint, and test 30 guards it.

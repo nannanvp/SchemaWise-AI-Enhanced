@@ -257,6 +257,12 @@ Keep every function, variable, API path, payload and DOM id. Make these changes:
     DBMS concepts, its *Help* panel answers a user's questions and its downloads are
     study material; environment variables, hosting and API-key topics belong in
     `README.md` and `docs/DEPLOYMENT.md` and must not appear in the interface.
+11. **Never put prose inside a flex or grid row.** A `display: flex/grid` container
+    gives every inline child and every text run its own box, so a step with `<b>` and
+    `.mono` markup inside a grid renders one fragment per line. `.help-steps li` is a
+    block whose roman numeral is absolutely positioned in the left gutter; keep prose
+    in block containers (`.lesson-points li`, `.help-table td`, `p`) and reserve flex
+    rows for label/value pairs such as `.dl-item-head` and `.dl-group-title`.
 
 ---
 
