@@ -10,8 +10,9 @@ still works offline thanks to built-in question banks.
 
 > This repository is the **Enhanced** build — published as
 > [`nannanvp/SchemaWise-AI-Enhanced`](https://github.com/nannanvp/SchemaWise-AI-Enhanced) —
-> plus a fifth section: **V. Learn, Download & Help**, with eight working lessons, six
-> in-browser exports and a troubleshooting FAQ. Sections I–IV are unchanged.
+> plus a fifth section: **V. Learn, Download & Help**, a student-facing study annex with
+> twelve lessons, ten in-browser exports (study material plus your own results) and a
+> self-help guide. Sections I–IV are unchanged.
 
 ---
 
@@ -61,22 +62,29 @@ still works offline thanks to built-in question banks.
 - Filter by exam and topic; optionally **Generate with AI** for extra questions
 
 ### 4. 📚 Learn, Download & Help (section V)
-- **Learn** — eight self-contained working lessons: primary keys and entity
-  integrity, foreign keys and referential integrity, NOT NULL/UNIQUE rules,
-  normalisation 1NF → BCNF, why many-to-many needs a junction table, naming
-  conventions, indexes and foreign-key speed, and how to read a review report.
-- Every lesson ends with a runnable example and an **Open in Reviewer** button that
-  loads the example into section I, runs the audit and shows the result.
-- **Download** — six exports, all generated in the browser (nothing is uploaded):
-  the review report as **Markdown** or **JSON**, the designer's schema as **`.sql`**,
-  the quiz score sheet as **CSV** (attempt + top ten), the loaded exam questions as
-  **CSV**, and the eight lessons as a printable **Markdown** study sheet. An export
-  stays disabled until there is something behind it.
+- **Learn** — twelve self-contained lessons written for students, covering the design
+  syllabus end to end: the relational model and the key ladder, foreign keys and
+  referential integrity, constraints, functional dependencies and finding keys,
+  1NF → 3NF, BCNF with lossless joins, ER-to-table mapping, joins and NULL
+  semantics, aggregates and HAVING, indexes and B+ trees, transactions and ACID, and
+  design hygiene. Each lesson states its goal, shows a worked schema, ends with
+  **Check yourself** questions whose answers open on demand, and carries an
+  **Open in Reviewer** button that runs its example through the audit.
+- **Download** — ten exports, all generated in the browser (nothing is uploaded).
+  *Study material*, ready at any time: a **study guide** built from the lessons
+  (prose, examples and every answer), a **cheat sheet**, a **glossary** of 50+ terms,
+  a **revision checklist** and a **practice paper** (the question bank as a worksheet
+  with its answer key). *Your results*, greyed out until there is something behind
+  them: the review report as **Markdown** or **JSON**, the designer's schema as
+  **`.sql`**, the quiz score sheet as **CSV** (attempt + top ten) and the loaded exam
+  questions as **CSV**.
 - The score sheet distinguishes **"correct on first try"** from
   **"correct after retry"**, per question.
-- **Help** — a four-step quick start and a ruled FAQ covering the Groq key, model
-  failover, what the score measures, invalid foreign keys, ephemeral databases on
-  Render, and printing the page as a handout.
+- **Help** — written for the people using the app, not for its operator: a five-step
+  tour of every section, what the four verdicts mean and how the score is weighted, a
+  revision routine that works, where your work goes, seven FAQs (offline AI, invalid
+  foreign keys, greyed-out buttons, retry marks, score changes, handing in the report,
+  phones and offline use) and a troubleshooting table.
 
 ---
 

@@ -64,50 +64,70 @@ fail, offline content is used. (Simulated via unit test.)
 
 ## Learn, Download & Help (section V)
 ### Test 20 — Lessons open and close
-Open section V. **Expected:** eight lessons, all closed.
-**Expand all** opens every one and the button flips to **Collapse all**.
+Open section V. **Expected:** twelve lessons, all closed. **Expand all** opens every
+one and the button flips to **Collapse all**.
 ### Test 21 — Lesson into the reviewer
 Open lesson 2 and press **Open in Reviewer**.
 **Expected:** the app switches to Schema Review, `#sqlInput` holds that lesson's own
 `CREATE TABLE` script, the schema name is the lesson title, and a scored review runs
-(the lesson-2 example scores 100/100).
-### Test 22 — Export gating
+(the lesson-2 example scores 97/100 with no errors and no warnings).
+### Test 22 — Self-check answers
+Expand a lesson and open one of its **Check yourself** questions.
+**Expected:** the answer appears in place, the marker flips from `+` to `–`, and
+closing it hides the answer again. All twenty-four checks behave the same way.
+### Test 23 — Lesson examples audit cleanly
+Press **Open in Reviewer** for each of the twelve lessons in turn.
+**Expected:** every example scores between 94 and 100 with no errors and no warnings;
+the only findings are *Index foreign key* suggestions, which lesson 10 explains.
+### Test 24 — Export gating
 Open section V with no review, no designed table, no finished quiz and no loaded exam
-set. **Expected:** only *Study notes* is enabled; the other five buttons are disabled
-and each status line says what is missing. Run a review, design a table, finish a quiz
-and load an exam set, then return: all six enable.
-### Test 23 — Report exports
+set. **Expected:** the five *Study material* buttons are enabled and their lines read
+as ready; the five *Your results* buttons are disabled and each status line says what
+is missing. Run a review, design a table, finish a quiz and load an exam set, then
+return: all ten enable.
+### Test 25 — Report exports
 Complete a review, then export the report as `.md` and as `.json`.
 **Expected:** the Markdown names the schema and shows the score, the severity counts
 and every finding with its fix; the JSON is the review payload verbatim (`score`,
 `counts`, `tables`, `findings`, `explanation`).
-### Test 24 — Score sheet export
+### Test 26 — Score sheet export
 Finish a quiz in which one question is answered wrongly before being solved, then
 export the score sheet.
 **Expected:** a CSV whose second line carries the score, whose question rows read
 `correct on first try` or `correct after retry`, and which closes with the top ten.
-### Test 25 — Study notes export
-Export *Study notes*. **Expected:** a single Markdown file holding all eight lessons —
-prose, bullet points and each lesson's SQL block.
-### Test 26 — Print
+### Test 27 — Study guide export
+Export *Study guide*. **Expected:** a single Markdown file beginning
+`# <name> — DBMS study guide`, holding all twelve lessons — goals, prose, bullet
+points, each lesson's SQL block, every self-check question and its answer.
+### Test 28 — Reference exports
+Export *Cheat sheet*, *Glossary* and *Revision checklist*.
+**Expected:** the cheat sheet carries ten `##` sections including the normal-form
+table; the glossary defines 50+ terms as `- **term** — definition`; the checklist
+carries 22 `- [ ]` boxes in three sections.
+### Test 29 — Practice paper export
+With the app using the built-in bank (no Groq key), export *Practice paper*.
+**Expected:** a Markdown file whose Part 1 lists the bank's questions with their
+options and an answer line each, and whose Part 2 gives the letter and the solution
+for every one.
+### Test 30 — Print
 With section V open, open the browser's print preview.
 **Expected:** flat ink-on-white output; download buttons and the `+`/`–` marks are
 gone; sidebar, command bar and other app furniture removed.
 
 ## Naming and models
-### Test 27 — Renaming the site
+### Test 31 — Renaming the site
 Edit the single line in `project_name.txt` (for example to `Quiz Studio`) and reload
 the page.
 **Expected:** the masthead wordmark, the browser-tab title and the Help panel show the
 new name — its last word keeps the italic accent — with no restart and no code change.
 `GET /api/project-name` returns `{"name":"Quiz Studio"}` and `GET /api/config` reports
 the same value in `app`. Restore `SchemaWise AI` afterwards.
-### Test 28 — Model chain in the status chip
+### Test 32 — Model chain in the status chip
 Hover the AI status chip with a Groq key configured.
 **Expected:** the tooltip reads
 `Groq AI is available · qwen/qwen3.8-27b → openai/gpt-oss-120b`; without a key it reads
 `AI unavailable - using built-in banks`.
-### Test 29 — Exports carry the site name
-Rename the site (as in test 27), then export *Study notes* and the designer `.sql`.
-**Expected:** the Markdown starts with `# <name> — DBMS working lessons` and the SQL
+### Test 33 — Exports carry the site name
+Rename the site (as in test 31), then export *Study guide* and the designer `.sql`.
+**Expected:** the Markdown starts with `# <name> — DBMS study guide` and the SQL
 comment reads `-- Designed in <name> · <date>`.

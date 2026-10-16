@@ -112,47 +112,59 @@ cards.
 
 ## Learn, Download & Help
 
-The fifth entry in the contents is a study annex in three parts.
+The fifth entry in the contents is a study annex for the people using the app:
+concepts to learn from, material to take away, and answers to find without asking.
 
 ### Learn
 
-Eight working lessons explain the rules the reviewer checks for: primary keys and
-entity integrity, foreign keys and referential integrity, `NOT NULL` / `UNIQUE`
-rules, normalisation from 1NF to BCNF, why a many-to-many relationship needs a
-junction table, naming conventions, indexes and foreign-key speed, and how to read
-a review report.
+Twelve lessons written for students, covering the design syllabus end to end: the
+relational model and the key ladder, foreign keys and referential integrity,
+constraints, functional dependencies and finding a key, 1NF to 3NF, BCNF with
+lossless joins, ER-to-table mapping, joins and NULL semantics, aggregates and
+`HAVING`, indexes and B+ trees, transactions and ACID, and design hygiene.
 
-- Click a lesson title to open it; **Expand all** opens all eight at once.
+- Click a lesson title to open it; **Expand all** opens all twelve at once.
+- Every lesson states its goal, shows a worked schema, and ends with **Check
+  yourself** questions — try to answer before you open the answer.
 - Every lesson ends with a runnable example behind **Open in Reviewer**. Pressing it
   loads that example into section I, names the review after the lesson and runs the
   audit, so the rule can be watched being checked.
-- Lesson 8 is deliberately imperfect — run it to see how a report reads before you
-  trust the score.
+- The lessons score 94–100 with no errors or warnings; the only findings are the
+  reviewer's standing suggestion to index each foreign key, which lesson 10 explains.
+- The lessons that carry nullable columns or a single-column key (8, 9) show how a
+  schema can be correct and still attract remarks.
 
 ### Download
 
-Six files can be produced, all assembled inside the browser: nothing is uploaded and
-nothing is stored on the server. A button stays greyed out until there is something
-behind it, and the small line above it says what will be saved.
+Ten files can be produced, all assembled inside the browser: nothing is uploaded and
+nothing is stored on the server. The **study material** needs nothing from you; a
+**result** stays greyed out until there is something behind it, and the small line
+above it says what will be saved.
 
 | Export | Format | Contains |
 | --- | --- | --- |
+| Study guide | `.md` | All twelve lessons — goals, prose, examples and every answer |
+| Cheat sheet | `.md` | Keys, dependencies, normal forms, joins, NULL, indexes, ACID |
+| Glossary | `.md` | 50+ terms defined one line at a time |
+| Revision checklist | `.md` | Every topic as a tick-list, plus practice and exam-day boxes |
+| Practice paper | `.md` | The question bank as a worksheet, answer key at the end |
 | Review report | `.md` | Score, severities, findings with their fixes, tutor explanation |
 | Review report | `.json` | The same audit as structured data |
 | Designed schema | `.sql` | Every table currently in the Table Designer |
 | Quiz score sheet | `.csv` | Your last attempt question by question, plus the top ten |
 | Exam question set | `.csv` | The loaded questions, their options, the answer and the citation |
-| Study notes | `.md` | All eight lessons with their examples |
 
 The score sheet marks each question **correct on first try** or **correct after
 retry** — the more useful column when revising.
 
 ### Help
 
-A four-step quick start — review, design, drill, keep — followed by a short FAQ:
-where the Groq key goes, which model answers, what the score measures, why a foreign
-key can be reported invalid, why history empties on a free Render instance, and how
-to print the page as a handout.
+Written for users, not for the operator: a five-step tour of every section, what the
+four verdicts mean and how the score is weighted, a revision routine, where your work
+goes, seven FAQs (offline AI, invalid foreign keys, greyed-out buttons, retry marks,
+score changes, handing in the report, phones and offline use) and a troubleshooting
+table. Operator topics — keys, environment variables, hosting — live in this
+repository's README, not in the interface.
 
 ---
 

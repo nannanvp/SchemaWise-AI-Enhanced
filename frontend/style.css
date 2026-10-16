@@ -1588,7 +1588,8 @@ body.dark .segmented button.active { color: var(--accent); }
 .lesson { border-bottom: 1px solid var(--rule); }
 
 .lesson > summary,
-.faq > summary {
+.faq > summary,
+.check > summary {
   display: flex;
   align-items: baseline;
   gap: 12px;
@@ -1599,15 +1600,19 @@ body.dark .segmented button.active { color: var(--accent); }
   transition: color var(--t) ease;
 }
 .lesson > summary::-webkit-details-marker,
-.faq > summary::-webkit-details-marker { display: none; }
+.faq > summary::-webkit-details-marker,
+.check > summary::-webkit-details-marker { display: none; }
 .lesson > summary:hover,
-.faq > summary:hover { color: var(--accent); }
+.faq > summary:hover,
+.check > summary:hover { color: var(--accent); }
 .lesson > summary:focus-visible,
-.faq > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.faq > summary:focus-visible,
+.check > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 /* disclosure mark, drawn in the mono face to match the exam toggle */
 .lesson > summary::after,
-.faq > summary::after {
+.faq > summary::after,
+.check > summary::after {
   content: "+";
   margin-left: auto;
   flex: 0 0 auto;
@@ -1617,7 +1622,8 @@ body.dark .segmented button.active { color: var(--accent); }
   color: var(--muted);
 }
 .lesson[open] > summary::after,
-.faq[open] > summary::after { content: "\2013"; }
+.faq[open] > summary::after,
+.check[open] > summary::after { content: "\2013"; }
 
 .lesson-num {
   flex: 0 0 auto;
@@ -1775,6 +1781,110 @@ body.dark .segmented button.active { color: var(--accent); }
   color: var(--ink-2);
 }
 
+/* Self-check questions: quieter than a lesson, same disclosure mark. */
+.lesson-goal {
+  max-width: 68ch;
+  padding-left: 10px;
+  border-left: 2px solid var(--accent);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-2);
+}
+.lesson-checks {
+  margin-top: 14px;
+  padding: 2px 14px 8px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--code-bg);
+}
+.lesson-checks-title {
+  margin: 9px 0 2px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.check { border-bottom: 1px solid var(--rule); }
+.check:last-child { border-bottom: 0; }
+.check > summary { font-size: 13px; font-weight: 600; }
+.check > summary::after { font-weight: 400; }
+.check > p {
+  max-width: 68ch;
+  padding: 0 4px 12px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+/* Downloads split into study material and session results. */
+.dl-group + .dl-group {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+.dl-group-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.dl-group-note {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--faint);
+}
+
+/* Help: titled blocks with plain-language tables. */
+.help-block + .help-block {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+.help-title {
+  margin-bottom: 10px;
+  font-family: var(--serif);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.help-note {
+  max-width: 72ch;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+.help-table { width: 100%; border-collapse: collapse; }
+.help-table th {
+  padding: 0 14px 7px 0;
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--rule-strong);
+}
+.help-table td {
+  max-width: 46ch;
+  padding: 9px 14px 9px 0;
+  vertical-align: top;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--rule);
+}
+.help-table tr:last-child td { border-bottom: 0; }
+.help-table td:first-child { color: var(--ink); }
+
 /* ----------------------------- 16. MOTION -------------------------- */
 /* No entrance keyframes, no bounce: panels switch instantly. */
 
@@ -1872,6 +1982,10 @@ body.dark .segmented button.active { color: var(--accent); }
   .lesson-name { font-size: 14px; }
   .lesson-body { padding-left: 18px; }
   .help-steps li { grid-template-columns: 24px minmax(0, 1fr); gap: 8px; }
+  .help-table th,
+  .help-table td { padding-right: 10px; }
+  .help-table td { max-width: none; }
+  .lesson-checks { padding: 2px 11px 7px; }
   .exam-card { padding: 16px 15px; }
   .cmd-actions { flex-wrap: wrap; }
   .metric-tiles { gap: 8px; }
@@ -1892,10 +2006,14 @@ body.dark .segmented button.active { color: var(--accent); }
   #lessonToggleAll { display: none !important; }
   .dl-item { background: #ffffff !important; border: 1px solid #000000; }
   .lesson-sql { background: #ffffff !important; border: 1px solid #000000; }
+  .lesson-checks { background: #ffffff !important; border: 1px solid #000000; }
   .lesson > summary::after,
-  .faq > summary::after { content: none; }
+  .faq > summary::after,
+  .check > summary::after { content: none; }
   .lesson-list,
   .help-steps li,
+  .help-table tr,
+  .lesson-checks,
   .dl-item,
   .faq { break-inside: avoid; }
 

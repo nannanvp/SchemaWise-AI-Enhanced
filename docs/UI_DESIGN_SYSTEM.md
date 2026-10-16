@@ -157,9 +157,9 @@ no keyframe flourishes. `@media (prefers-reduced-motion: reduce)` must zero them
 `data-level="easy|medium|hard"`; each `.tab` carries `data-title`/`data-subtitle`;
 `datalist#topicOptions`; `#examLimit` options `5|10|20`; `#quizCount` min 1 max 20;
 `[data-project-name]` marks every node that displays the site name.
-Export buttons carry
-`data-export="review-md|review-json|designer-sql|quiz-csv|exam-csv|lessons-md"` and
-their status lines carry `data-meta="review|designer|quiz|exam|lessons"`.
+Export buttons carry `data-export="lessons-md|cheatsheet-md|glossary-md|revision-md|practice-md|review-md|review-json|designer-sql|quiz-csv|exam-csv"`
+and their status lines carry
+`data-meta="guide|cheatsheet|glossary|revision|practice|review|designer|quiz|exam"`.
 
 ---
 
@@ -192,10 +192,15 @@ Designer: `.grid-sql`, `.cols-head`, `.studio-actions`, `.sql-dock`
 Quiz: `.arena`, `.option-tile`, `.rail`, `.segmented`, `.leaderboard`
 Exam: `.filter-bar`, `.feed`
 Learn/Download/Help (section V): `.lesson-list`, `.lesson` (a `<details>`),
-`.lesson-num`, `.lesson-name` (serif), `.lesson-tag`, `.lesson-body`,
-`.lesson-points`, `.lesson-note`, `.lesson-sql`, `.lesson-actions`, `.dl-grid`,
-`.dl-item`, `.dl-item-head`, `.dl-fmt`, `.dl-desc`, `.dl-meta` (JS toggles
-`.is-ready` on it), `.help-steps`, `.faq-list`, `.faq` (a `<details>`)
+`.lesson-num`, `.lesson-name` (serif), `.lesson-tag`, `.lesson-body`, `.lesson-goal`
+(the italic accent-ruled "you will be able to" line), `.lesson-points`,
+`.lesson-note`, `.lesson-sql`, `.lesson-checks` with `.lesson-checks-title` and
+`.check` (a `<details>` per self-check question, reusing the lesson/FAQ disclosure
+mark), `.lesson-actions`, `.dl-group`, `.dl-group-title`, `.dl-group-note`,
+`.dl-grid`, `.dl-item`, `.dl-item-head`, `.dl-fmt`, `.dl-desc`, `.dl-meta` (JS
+toggles `.is-ready` on it), `.help-block`, `.help-title`, `.help-note`, `.help-table`
+(two-column verdict/troubleshooting tables), `.help-steps`, `.faq-list`, `.faq`
+(a `<details>`)
 Utility: `.muted`, `.mono`, `.sr-only`, `.stack`, `.row-wrap`, `.divider`, `.skeleton`
 
 ---
@@ -232,7 +237,10 @@ Keep every function, variable, API path, payload and DOM id. Make these changes:
    click of the `learn` tab, it enables a `[data-export]` button only when its
    source has content, writes the matching `[data-meta]` line and toggles
    `.is-ready`. Exports are assembled in the browser (`Blob` + an `<a download>`);
-   nothing is uploaded. `#lessonToggleAll` opens or closes every `.lesson` in
+   nothing is uploaded. The five *Study material* sources are constants — the study
+   guide is read back out of `#lessonList`, the practice paper is fetched from
+   `/api/exam/questions` — so they are always ready; only the *Your results* group
+   waits for a session. `#lessonToggleAll` opens or closes every `.lesson` in
    `#lessonList`, and each lesson's **Open in Reviewer** loads its `.lesson-sql`
    into `#sqlInput`, sets `#schemaName` from the lesson title and runs the review.
 8. Keep the score ring, count-up, skeletons, nav drawer, page headings and every
@@ -245,6 +253,10 @@ Keep every function, variable, API path, payload and DOM id. Make these changes:
    `textContent` is written, never `innerHTML`, and the name is clipped to 60
    characters. The HTML ships with the default `SchemaWise AI` hardcoded, so the
    page still reads correctly when JavaScript or the API is unavailable.
+10. **Section V is written for students, not for the operator.** Its lessons teach the
+    DBMS concepts, its *Help* panel answers a user's questions and its downloads are
+    study material; environment variables, hosting and API-key topics belong in
+    `README.md` and `docs/DEPLOYMENT.md` and must not appear in the interface.
 
 ---
 
@@ -256,12 +268,14 @@ Keep every function, variable, API path, payload and DOM id. Make these changes:
 - The AI status chip names the model chain that is actually in use
   (`qwen/qwen3.8-27b → openai/gpt-oss-120b` on a fresh Groq setup).
 - Send to Review Editor fills `#sqlInput` and switches to Schema Review.
-- Section V: the eight lessons open and close; **Expand all** flips to **Collapse
-  all**; each lesson's **Open in Reviewer** loads its own SQL, names the review after
-  the lesson and returns a scored audit.
-- Exports start mostly disabled — on a fresh load only *Study notes* is live — and
-  each one enables once its source exists, writing a file that matches the state on
-  screen (report `.md`/`.json`, designer `.sql`, quiz `.csv`, exam `.csv`, lessons `.md`).
+- Section V: the twelve lessons open and close; **Expand all** flips to **Collapse
+  all**; every lesson's **Open in Reviewer** loads its own SQL, names the review after
+  the lesson and returns an audit of 94–100 with no errors or warnings; every
+  self-check answer opens and closes in place.
+- On a fresh load the five *Study material* exports are live and the five *Your
+  results* exports are disabled; each result enables once its source exists, writing a
+  file that matches the state on screen (report `.md`/`.json`, designer `.sql`, quiz
+  `.csv`, exam `.csv`).
 - Quiz: correct pick shows "You have answered correctly"; wrong shows
   "Yet to choose the correct answer"; submit shows the scoreboard, grade and table.
 - Exam cards show bracketed citations, topic labels, and a working solution toggle.

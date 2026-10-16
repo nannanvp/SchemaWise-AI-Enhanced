@@ -1156,13 +1156,19 @@ function examCsv() {
   return out.join("\r\n");
 }
 
-/* --- the eight lessons, read back out of the document ---------------- */
+/* --- the twelve lessons, read back out of the document -------------- */
+const cleanText = (el) => el.textContent.replace(/\s+/g, " ").trim();
+
 function lessonsMarkdown() {
   const lessons = $$("#lessonList .lesson");
   const out = [
-    `# ${projectName} — DBMS working lessons`,
+    `# ${projectName} — DBMS study guide`,
     "",
-    `${lessons.length} lessons · exported ${isoDate()}`,
+    `${lessons.length} lessons with worked examples, self-check questions and answers · exported ${isoDate()}`,
+    "",
+    "How to use it: read a lesson, answer its questions before reading the answers",
+    "below them, then rebuild the example in the Table Designer and run it through",
+    "the reviewer.",
     "",
     "---",
     "",
@@ -1171,25 +1177,295 @@ function lessonsMarkdown() {
     const name = d.querySelector(".lesson-name").textContent.trim();
     const tag = d.querySelector(".lesson-tag").textContent.trim();
     out.push(`## ${i + 1}. ${name}${tag ? `  ·  _${tag}_` : ""}`, "");
-    d.querySelectorAll(".lesson-body > p").forEach((p) => out.push(p.textContent.replace(/\s+/g, " ").trim(), ""));
-    const points = [...d.querySelectorAll(".lesson-points li")];
-    if (points.length) {
-      points.forEach((li) => out.push(`- ${li.textContent.replace(/\s+/g, " ").trim()}`));
-      out.push("");
-    }
-    const sql = d.querySelector(".lesson-sql");
-    if (sql) out.push("```sql", sql.textContent.trim(), "```", "");
+    [...d.querySelector(".lesson-body").children].forEach((node) => {
+      if (node.classList.contains("lesson-goal")) {
+        out.push(`**Goal:** ${cleanText(node)}`, "");
+      } else if (node.tagName === "P" && node.classList.contains("lesson-note")) {
+        out.push(`> ${cleanText(node)}`, "");
+      } else if (node.tagName === "P") {
+        out.push(cleanText(node), "");
+      } else if (node.classList.contains("lesson-points")) {
+        node.querySelectorAll("li").forEach((li) => out.push(`- ${cleanText(li)}`));
+        out.push("");
+      } else if (node.classList.contains("lesson-sql")) {
+        out.push("```sql", node.textContent.trim(), "```", "");
+      } else if (node.classList.contains("lesson-checks")) {
+        const checks = [...node.querySelectorAll(".check")];
+        if (!checks.length) return;
+        out.push("### Check yourself", "");
+        checks.forEach((c, n) => {
+          out.push(
+            `**${n + 1}.** ${cleanText(c.querySelector("summary"))}`,
+            "",
+            `> ${cleanText(c.querySelector("p"))}`,
+            "",
+          );
+        });
+      }
+    });
   });
   return out.join("\n");
 }
 
 const designerSql = () => designerTables.map(tableToSql).join("\n\n");
 
+/* ------------------------------------------------------------------ */
+/* Study material                                                      */
+/* These documents are ready-made: they need nothing from the session  */
+/* and are the same for every reader.                                  */
+/* ------------------------------------------------------------------ */
+function studyPackHeader(title, subtitle) {
+  return [
+    `# ${projectName} — ${title}`,
+    "",
+    subtitle,
+    "",
+    `Exported ${isoDate()} from ${projectName}.`,
+    "",
+    "---",
+    "",
+  ].join("\n");
+}
+
+function cheatSheetMarkdown() {
+  return studyPackHeader(
+    "DBMS cheat sheet",
+    "Keys, functional dependencies, normal forms, joins, NULL rules, indexes and transactions — the whole subject on a few pages.",
+  ) + [
+    "## 1 · Keys",
+    "",
+    "| Term | Meaning |",
+    "| --- | --- |",
+    "| Superkey | Any column set that identifies a row |",
+    "| Candidate key | A superkey with no removable column (minimal) |",
+    "| Primary key | The candidate key you nominate — unique, never NULL |",
+    "| Alternate key | A candidate key that is not the primary key |",
+    "| Foreign key | A column holding another table's candidate key |",
+    "",
+    "## 2 · Functional dependencies",
+    "",
+    "- Write `X → Y` when one value of X gives at most one value of Y.",
+    "- **Closure** `X⁺`: start with X; whenever some `A → B` has A inside the closure, add B.",
+    "- `X⁺` covers every attribute ⇒ X is a **superkey**; minimal such X ⇒ **candidate key**.",
+    "- **Armstrong:** reflexivity `X → subset(X)` · augmentation `X → Y` gives `XZ → YZ` · transitivity `X → Y, Y → Z` gives `X → Z`.",
+    "- **Partial** dependency: needs only part of a composite key (breaks 2NF). **Transitive**: runs through a non-key column (breaks 3NF).",
+    "",
+    "## 3 · Normal forms",
+    "",
+    "| Form | Removes | Test |",
+    "| --- | --- | --- |",
+    "| 1NF | Repeating groups, non-atomic cells | One value per cell |",
+    "| 2NF | Partial dependencies | No non-key column depends on part of the key |",
+    "| 3NF | Transitive dependencies | For every `X → A`: X is a superkey, or A is prime |",
+    "| BCNF | The remaining anomalies | Every determinant is a superkey |",
+    "",
+    "- Decompose R into R1, R2 only if `R1 ∩ R2` contains a candidate key of R1 or R2 (**lossless join**).",
+    "- 3NF is always reachable losslessly *and* dependency-preserving; BCNF sometimes has to give up a dependency.",
+    "",
+    "## 4 · Joins",
+    "",
+    "| Join | Keeps |",
+    "| --- | --- |",
+    "| INNER | Matching rows from both sides only |",
+    "| LEFT | Every left row; missing right columns become NULL |",
+    "| RIGHT | Every right row; missing left columns become NULL |",
+    "| FULL | Every row from both sides |",
+    "| CROSS | Every pair — m × n rows |",
+    "",
+    "## 5 · NULL and three-valued logic",
+    "",
+    "- NULL means *unknown*: `NULL = NULL` is UNKNOWN, and `WHERE` keeps only TRUE.",
+    "- Use `IS NULL` / `IS NOT NULL`; `x <> 5` silently drops the NULL rows.",
+    "- `NOT IN` with a NULL in the list returns **no rows at all** — use `NOT EXISTS`.",
+    "- `COUNT(*)` counts rows; `COUNT(col)` and `AVG(col)` skip NULLs; `SUM` over no rows is NULL.",
+    "",
+    "## 6 · Grouping",
+    "",
+    "- `WHERE` filters rows before grouping; `HAVING` filters groups afterwards — only HAVING may test an aggregate.",
+    "- Every non-aggregated column in the select list must appear in `GROUP BY`.",
+    "",
+    "## 7 · Constraints",
+    "",
+    "`PRIMARY KEY` = `UNIQUE` + `NOT NULL` · `UNIQUE` permits NULLs (usually many) · `CHECK` is a per-row rule · `DEFAULT` is not a nullability rule.",
+    "",
+    "## 8 · Indexes and B+ trees",
+    "",
+    "- Keys are ordered; all data pointers live in the linked leaves; height ≈ 3–4 for millions of rows, so a lookup is a few page reads.",
+    "- An index on `(a, b)` serves `a`, or `a` with `b` — never `b` alone (**left prefix rule**).",
+    "- **Covering** index answers the query from the index alone; a **clustered** index sets the row order, and there is only one.",
+    "- Every index costs space and slows writes; skip columns with few distinct values.",
+    "",
+    "## 9 · Transactions",
+    "",
+    "**ACID** — atomicity, consistency, isolation, durability.",
+    "",
+    "| Isolation level | Dirty read | Non-repeatable read | Phantom |",
+    "| --- | --- | --- | --- |",
+    "| READ UNCOMMITTED | possible | possible | possible |",
+    "| READ COMMITTED | prevented | possible | possible |",
+    "| REPEATABLE READ | prevented | prevented | possible * |",
+    "| SERIALIZABLE | prevented | prevented | prevented |",
+    "",
+    "\\* as the SQL standard defines it; some engines prevent phantoms at REPEATABLE READ too.",
+    "",
+    "- Two-phase locking — take every lock before releasing any — guarantees serializable schedules, at the cost of blocking and possible deadlock.",
+    "",
+    "## 10 · Types and habits",
+    "",
+    "- Money is `DECIMAL(p, s)`, never `FLOAT`; time is `DATE` or `TIMESTAMP`; phone numbers and PINs are text.",
+    "- One fact per column; `snake_case`; singular table names; `*_id` for keys; `is_` / `has_` for booleans.",
+    "- Prefer a narrow surrogate key and keep the natural key as a `UNIQUE` column.",
+    "",
+  ].join("\n");
+}
+
+function glossaryMarkdown() {
+  const terms = [
+    ["ACID", "the four guarantees of a transaction: atomicity, consistency, isolation, durability"],
+    ["aggregate function", "a function that collapses many rows into one value: COUNT, SUM, AVG, MIN, MAX"],
+    ["alternate key", "a candidate key that is not the one chosen as primary"],
+    ["anomaly", "a data fault caused by redundancy — insert, update or delete"],
+    ["Armstrong's axioms", "reflexivity, augmentation and transitivity: sound and complete for deriving every implied dependency"],
+    ["atomicity", "a transaction completes in full or has no effect at all"],
+    ["attribute", "a column of a relation; a property of an entity"],
+    ["B+ tree", "the usual index structure — ordered keys, data pointers in linked leaves, height O(log n)"],
+    ["blocking", "one transaction waiting for a lock held by another"],
+    ["candidate key", "a minimal superkey; any candidate key may become the primary key"],
+    ["cardinality", "the number of rows in a relation; in ER terms, how many entities sit on each side of a relationship"],
+    ["cascade", "a referential action that propagates a delete or update to the child rows"],
+    ["CHECK", "a constraint over the values of a single row"],
+    ["clustered index", "an index that fixes the physical order of the rows; a table has at most one"],
+    ["commit", "the point at which a transaction's changes become permanent"],
+    ["composite key", "a key made of more than one column"],
+    ["concurrency", "several transactions interleaved — what isolation has to tame"],
+    ["consistency", "a transaction moves the database from one valid state to another"],
+    ["covering index", "an index holding every column a query needs, so the table is never read"],
+    ["data independence", "changing the storage layer without changing the schemas above it"],
+    ["deadlock", "two transactions each holding a lock the other wants; the engine breaks it by rolling one back"],
+    ["decomposition", "splitting a relation into smaller relations; it must be lossless"],
+    ["dependency preservation", "every original dependency still holds inside one of the decomposed relations"],
+    ["determinant", "the left-hand side of a functional dependency"],
+    ["dirty read", "reading data written by a transaction that has not committed"],
+    ["domain", "the set of values an attribute is allowed to take"],
+    ["durability", "committed changes survive a crash"],
+    ["entity integrity", "the primary key is unique and never NULL"],
+    ["ER model", "a diagram of entities, attributes and relationships, drawn before the tables"],
+    ["foreign key", "a column, or set of columns, that references a candidate key of another table"],
+    ["functional dependency", "X → Y: one value of X determines at most one value of Y"],
+    ["HAVING", "the filter applied to groups after GROUP BY; WHERE can only filter rows"],
+    ["index", "a sorted structure that speeds up lookups at the cost of writes and space"],
+    ["isolation", "concurrent transactions never see each other's partial work"],
+    ["junction table", "the table that resolves a many-to-many relationship, keyed by the pair of foreign keys"],
+    ["lossless join", "a decomposition that joins back without inventing or losing rows"],
+    ["normal form", "a level of normalisation: 1NF, 2NF, 3NF, BCNF, and beyond them 4NF and 5NF"],
+    ["NULL", "the absence of a value; comparisons with it are UNKNOWN rather than TRUE"],
+    ["phantom read", "seeing rows appear inside a range that was already read"],
+    ["primary key", "the candidate key chosen to identify rows; unique and NOT NULL"],
+    ["referential integrity", "every foreign key value matches an existing parent key, or is NULL"],
+    ["relation", "a table: a set of tuples over named attributes"],
+    ["rollback", "undoing a transaction's uncommitted changes"],
+    ["schedule", "the interleaved order in which concurrent transactions run their operations"],
+    ["selectivity", "how few rows a condition keeps; high selectivity is what earns an index"],
+    ["serializable", "a schedule equivalent to running the transactions one after another"],
+    ["superkey", "any set of columns that identifies a row"],
+    ["three-valued logic", "TRUE, FALSE and UNKNOWN — and WHERE keeps only TRUE"],
+    ["transaction", "a unit of work that commits or rolls back as a whole"],
+    ["tuple", "a row of a relation"],
+    ["two-phase locking", "taking every lock before releasing any, which guarantees serializable schedules"],
+    ["view", "a stored query that behaves like a read-only table"],
+    ["weak entity", "an entity that cannot be identified without its owner, so its key includes the owner's key"],
+  ];
+  return studyPackHeader(
+    "DBMS glossary",
+    `${terms.length} terms, defined one line at a time — the vocabulary examiners use.`,
+  ) + terms.map(([term, meaning]) => `- **${term}** — ${meaning}.`).join("\n") + "\n";
+}
+
+function revisionMarkdown() {
+  return studyPackHeader(
+    "DBMS revision checklist",
+    "Tick a box only when you can answer the question without notes. Each line points at the matching lesson in the tool.",
+  ) + [
+    "## Concepts",
+    "",
+    "- [ ] **The relational model** (lesson 1) — define relation, tuple, domain, and name the four kinds of key.",
+    "- [ ] **Entity integrity** (lesson 1) — why is a primary key never NULL, and never optional?",
+    "- [ ] **Foreign keys** (lesson 2) — what may a foreign key point at, and what do ON DELETE CASCADE, RESTRICT and SET NULL do?",
+    "- [ ] **Constraints** (lesson 3) — when is UNIQUE not enough, and what can a CHECK not see?",
+    "- [ ] **Functional dependencies** (lesson 4) — compute a closure and find a candidate key from a set of dependencies.",
+    "- [ ] **1NF, 2NF, 3NF** (lesson 5) — spot a repeating group, a partial dependency and a transitive dependency.",
+    "- [ ] **BCNF** (lesson 6) — state the definition, test a decomposition for losslessness, and explain the 3NF trade-off.",
+    "- [ ] **ER to tables** (lesson 7) — place the key for 1:N, 1:1, M:N and a weak entity.",
+    "- [ ] **Joins** (lesson 8) — say what each join keeps, and count the rows a CROSS join returns.",
+    "- [ ] **NULL** (lesson 8) — three-valued logic, the NOT IN trap, and why COUNT(col) differs from COUNT(*).",
+    "- [ ] **Grouping** (lesson 9) — WHERE versus HAVING, and which columns may appear in the select list.",
+    "- [ ] **Indexes** (lesson 10) — the left-prefix rule, covering and clustered indexes, and when an index is wasted.",
+    "- [ ] **Transactions** (lesson 11) — ACID, the three read anomalies, isolation levels, two-phase locking.",
+    "- [ ] **Design hygiene** (lesson 12) — money, dates, phone numbers, naming, surrogate keys, audit columns.",
+    "",
+    "## Practice",
+    "",
+    "- [ ] Rebuild one lesson's schema from memory and score it in the reviewer without looking.",
+    "- [ ] Break a schema on purpose in three different ways and predict the findings before pressing Review.",
+    "- [ ] Pass a quiz at hard level with at least 80%, with no answer needing a second attempt.",
+    "- [ ] Work through the practice paper without notes, then mark it with the answer key.",
+    "- [ ] Explain out loud, in two minutes each, normalisation, NULL behaviour and ACID.",
+    "",
+    "## Before the exam",
+    "",
+    "- [ ] Export the study guide and the cheat sheet, and read them once on paper.",
+    "- [ ] Check any bank question against the official paper — the bank is practice material, not a past paper.",
+    "- [ ] Sleep. A schema you can draw from memory is worth more than one you can recognise.",
+    "",
+  ].join("\n");
+}
+
+async function practicePaperMarkdown() {
+  let data = null;
+  try {
+    data = await api("/api/exam/questions?exam=all&topic=all&limit=100");
+  } catch {
+    return null;
+  }
+  const questions = (data && data.questions) || [];
+  if (!questions.length) return null;
+  const letters = ["A", "B", "C", "D", "E"];
+  const out = [
+    studyPackHeader(
+      "DBMS practice paper",
+      `${questions.length} multiple-choice questions from the built-in bank, with the full answer key at the end.`,
+    ),
+    "Work through Part 1 without notes, then mark yourself with Part 2. Each question",
+    "carries its topic and source tag; the bank holds representative practice items,",
+    "so always check the wording against the official paper.",
+    "",
+    "## Part 1 · Questions",
+    "",
+  ];
+  questions.forEach((q, i) => {
+    const tag = [q.exam, q.topic].filter(Boolean).join(" · ");
+    out.push(`**${i + 1}.** ${q.question}${tag ? `  _(${tag})_` : ""}`, "");
+    (q.options || []).forEach((opt, n) => out.push(`${letters[n] || n + 1}. ${opt}`));
+    out.push("", "Answer: ______", "");
+  });
+  out.push("---", "", "## Part 2 · Answer key", "");
+  questions.forEach((q, i) => {
+    const letter = letters[q.answer] || String(q.answer);
+    const parts = [`**${i + 1}.** ${letter}`];
+    if (q.solution || q.explanation) parts.push(`— ${q.solution || q.explanation}`);
+    if (q.tag) parts.push(`_${q.tag}_`);
+    out.push(parts.join(" "), "");
+  });
+  return out.join("\n");
+}
+
+
 /* --- dispatch ------------------------------------------------------- */
 const EXPORT_META = {
   "review-md": "review", "review-json": "review",
   "designer-sql": "designer", "quiz-csv": "quiz", "exam-csv": "exam",
-  "lessons-md": "lessons",
+  "lessons-md": "guide", "cheatsheet-md": "cheatsheet", "glossary-md": "glossary",
+  "revision-md": "revision", "practice-md": "practice",
 };
 const EXPORTS = {
   "review-md": () => latest && {
@@ -1214,9 +1490,28 @@ const EXPORTS = {
     text: examCsv(), mime: "text/csv;charset=utf-8",
   },
   "lessons-md": () => ({
-    name: "schemawise-lessons.md",
+    name: "dbms-study-guide.md",
     text: lessonsMarkdown(), mime: "text/markdown;charset=utf-8",
   }),
+  "cheatsheet-md": () => ({
+    name: "dbms-cheatsheet.md",
+    text: cheatSheetMarkdown(), mime: "text/markdown;charset=utf-8",
+  }),
+  "glossary-md": () => ({
+    name: "dbms-glossary.md",
+    text: glossaryMarkdown(), mime: "text/markdown;charset=utf-8",
+  }),
+  "revision-md": () => ({
+    name: "dbms-revision-checklist.md",
+    text: revisionMarkdown(), mime: "text/markdown;charset=utf-8",
+  }),
+  "practice-md": async () => {
+    const text = await practicePaperMarkdown();
+    return text && {
+      name: "dbms-practice-paper.md",
+      text, mime: "text/markdown;charset=utf-8",
+    };
+  },
 };
 
 $$("[data-export]").forEach((btn) => {
@@ -1224,13 +1519,19 @@ $$("[data-export]").forEach((btn) => {
     const build = EXPORTS[btn.dataset.export];
     if (!build) return;
     const spec = await build();
-    if (!spec) { toast("There is nothing to export yet."); return; }
+    if (!spec) {
+      toast(btn.dataset.export === "practice-md"
+        ? "The question bank could not be reached — try again in a moment."
+        : "There is nothing to export yet.");
+      return;
+    }
     downloadFile(spec.name, spec.text, spec.mime);
     toast(`${spec.name} saved`);
   };
 });
 
-/* Buttons grey out until there is something behind them. */
+/* Buttons grey out until there is something behind them. The study
+   material is always ready; the results wait for a session. */
 function refreshExportState() {
   const states = {
     review: latest
@@ -1245,7 +1546,11 @@ function refreshExportState() {
     exam: examState.questions.length
       ? [true, `${examState.questions.length} question(s) loaded`]
       : [false, "No questions loaded."],
-    lessons: [true, `${$$("#lessonList .lesson").length} lessons ready`],
+    guide: [true, `${$$("#lessonList .lesson").length} lessons with answers.`],
+    cheatsheet: [true, "One-page reference."],
+    glossary: [true, "40+ terms defined."],
+    revision: [true, "Tick-list ready."],
+    practice: [true, "Worksheet and answer key."],
   };
   Object.entries(states).forEach(([key, [ready, text]]) => {
     $$(`[data-meta="${key}"]`).forEach((el) => {
