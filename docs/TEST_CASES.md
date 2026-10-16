@@ -137,3 +137,9 @@ Hover the AI status chip with a Groq key configured.
 Rename the site (as in test 32), then export *Study guide* and the designer `.sql`.
 **Expected:** the Markdown starts with `# <name> — DBMS study guide` and the SQL
 comment reads `-- Designed in <name> · <date>`.
+### Test 35 — Download Report carries the site name
+Run a review, then press **Download Report** in the command bar.
+**Expected:** the saved `schema-review-report.txt` opens with
+`<name> — Schema Review Report`, using the site name from `project_name.txt` — not the
+pre-rename title. (Found on the live deployment, where the file still opened with the
+old `AI-Based` heading.)

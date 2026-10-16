@@ -446,7 +446,7 @@ $("closeHistory").onclick = () => $("historyDrawer").classList.remove("open");
 
 $("downloadBtn").onclick = () => {
   if (!latest) return;
-  const report = `AI-Based Schema Reviewer Report
+  const report = `${projectName} — Schema Review Report
 
 Schema: ${latest.schema_name}
 Date: ${latest.created_at}

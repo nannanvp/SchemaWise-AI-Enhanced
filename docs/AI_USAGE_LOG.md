@@ -98,3 +98,21 @@ rather than for its operator:
   (`.help-steps li { padding-left: 30px }`), which keeps the step as one prose block;
   the same step now measures 64–86px. Rule 11 of the design system records the
   general constraint, and test 30 guards it.
+
+## Production verification (`schemawise-ai-enhanced.onrender.com`, 17-10-2026)
+- Verified from outside the host: every endpoint answered (`/api/health`,
+  `/api/project-name`, `/api/config`, review + history, quiz generate/submit,
+  leaderboard, exam bank, AI-explain), and the three served frontend files were
+  SHA-256-identical to the local working copy of the deployed commit.
+- Browser pass over the live site: section V (12 lessons, 24 self-checks, the 64–86px
+  help steps), all ten exports captured with real names and sizes, review + AI Tutor
+  explanation (2.1s Groq call, correct em dashes), quiz played to completion with the
+  leaderboard entry, exam bank load and reveal-solution, Table Designer commit with
+  generated SQL, sample loader, history recall, dark/light theme, zero console
+  messages and no failed requests.
+- Defect found and fixed: **Download Report** still wrote the pre-rename title
+  `AI-Based Schema Reviewer Report` into `schema-review-report.txt`. The heading now
+  comes from `projectName` (test 35).
+- Deployment-side note (no code change): the Render service's `ASSIGNED_TOPIC` value
+  is missing its final `s)`, so the status chip and leaderboard rows show
+  `DBMS (Database Management System)`; `render.yaml` carries the correct string.
