@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SchemaWise AI — AI-based database schema reviewer, table designer, DBMS quiz, competitive exam question bank, plus working lessons, exports and help." />
+  <meta name="theme-color" content="#fbfaf7" />
+  <title>SchemaWise AI · Schema Review, Designer, Quiz, Exam &amp; Learn</title>
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23fbfaf7'/><rect x='4.5' y='4.5' width='23' height='23' rx='3.5' fill='none' stroke='%231f3a5f' stroke-width='1.5'/><rect x='9' y='10' width='14' height='2.4' rx='1.2' fill='%231f3a5f'/><rect x='9' y='14.8' width='14' height='2.4' rx='1.2' fill='%231f3a5f'/><rect x='9' y='19.6' width='8.5' height='2.4' rx='1.2' fill='%231f3a5f'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div id="navBackdrop" class="nav-backdrop" aria-hidden="true"></div>
+
+  <!-- ============================ TABLE OF CONTENTS ============================ -->
+  <aside id="sidebar" class="sidebar">
+    <header class="masthead">
+      <span class="masthead-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="16" cy="8.5" rx="10" ry="4" />
+          <path d="M6 8.5v7.5c0 2.2 4.5 4 10 4s10-1.8 10-4V8.5" />
+          <path d="M6 16v7.5c0 2.2 4.5 4 10 4s10-1.8 10-4V16" />
+        </svg>
+      </span>
+      <span class="masthead-text">
+        <span class="masthead-name" id="mastheadName">SchemaWise <em>AI</em></span>
+        <span class="masthead-sub">Database schema review &amp; study</span>
+      </span>
+    </header>
+
+    <p class="eyebrow">Contents</p>
+
+    <nav id="tabs" class="tabs" aria-label="Contents">
+      <button class="tab active" type="button" data-tab="review"
+              data-title="Schema Review"
+              data-subtitle="Audit a CREATE TABLE script and read the severity-ranked findings.">
+        <span class="tab-num" aria-hidden="true">I.</span>
+        <span class="tab-label">
+          <b>Schema Review</b>
+          <small>Audit SQL, read the findings</small>
+        </span>
+      </button>
+
+      <button class="tab" type="button" data-tab="designer"
+              data-title="Table Designer"
+              data-subtitle="Assemble tables, keys and foreign links; emit clean CREATE TABLE SQL.">
+        <span class="tab-num" aria-hidden="true">II.</span>
+        <span class="tab-label">
+          <b>Table Designer</b>
+          <small>Assemble tables and relationships</small>
+        </span>
+      </button>
+
+      <button class="tab" type="button" data-tab="quiz"
+              data-title="Quiz"
+              data-subtitle="Topic drills with immediate verdicts and a running leaderboard.">
+        <span class="tab-num" aria-hidden="true">III.</span>
+        <span class="tab-label">
+          <b>Quiz</b>
+          <small>Topic drills with verdicts</small>
+        </span>
+      </button>
+
+      <button class="tab" type="button" data-tab="exam"
+              data-title="Exam Questions"
+              data-subtitle="GATE and UGC-NET question bank with worked solutions.">
+        <span class="tab-num" aria-hidden="true">IV.</span>
+        <span class="tab-label">
+          <b>Exam Questions</b>
+          <small>GATE &amp; UGC-NET question bank</small>
+        </span>
+      </button>
+      <button class="tab" type="button" data-tab="learn"
+              data-title="Learn, Download &amp; Help"
+              data-subtitle="Working lessons, one-click exports, and answers to the questions that come up.">
+        <span class="tab-num" aria-hidden="true">V.</span>
+        <span class="tab-label">
+          <b>Learn, Download &amp; Help</b>
+          <small>Lessons, exports and support</small>
+        </span>
+      </button>
+    </nav>
+
+    <footer class="sidebar-foot">
+      <p class="eyebrow">Status</p>
+      <span id="aiStatus" class="chip" title="AI provider status">AI: checking…</span>
+      <p class="sidebar-note">Built-in tutor · offline question banks · local review history</p>
+    </footer>
+  </aside>
+
+  <!-- ================================== SHELL ================================== -->
+  <main class="app-main">
+    <header class="command-bar">
+      <div class="bar-inner">
+        <button id="navToggle" class="icon-btn nav-toggle" type="button" aria-label="Toggle contents" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h10" />
+          </svg>
+        </button>
+
+        <div class="page-head">
+          <h1 id="pageTitle">Schema Review</h1>
+          <p id="pageSubtitle">Audit a CREATE TABLE script and read the severity-ranked findings.</p>
+        </div>
+
+        <div class="cmd-actions">
+          <button id="themeBtn" class="btn btn-ghost btn-sm" type="button">Dark</button>
+          <button id="historyBtn" class="btn btn-ghost btn-sm" type="button">History</button>
+          <button id="downloadBtn" class="btn btn-ghost btn-sm" type="button" disabled>Download Report</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="panels">
+
+      <!-- ============================ I · SCHEMA REVIEW ============================ -->
+      <section class="tab-panel active" id="tab-review">
+        <section class="deck-top">
+          <div class="panel score-card">
+            <div class="score-ring">
+              <svg class="ring-svg" viewBox="0 0 140 140" aria-hidden="true" focusable="false">
+                <circle class="ring-track" cx="70" cy="70" r="54" fill="none" stroke-width="5" />
+                <circle id="scoreRingFill" cx="70" cy="70" r="54" fill="none" stroke-width="5"
+                        stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="339.3" />
+              </svg>
+            </div>
+            <div class="score-meta">
+              <p class="eyebrow">Schema health</p>
+              <span id="score" class="score-figure">--</span>
+              <span class="badge">Live audit</span>
+              <p class="hint">Weighted score across keys, normalisation, naming, relations and indexing.</p>
+            </div>
+          </div>
+
+          <div class="metric-tiles">
+            <div class="metric-tile tone-ink">
+              <span class="metric-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4.5" width="18" height="15" rx="1.5" />
+                  <path d="M3 10h18M9.5 10v9.5" />
+                </svg>
+              </span>
+              <span class="metric-label">Tables</span>
+              <strong id="tableCount" class="metric-value mono">--</strong>
+            </div>
+
+            <div class="metric-tile tone-error">
+              <span class="metric-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="8.6" />
+                  <path d="M12 7.6v5.2M12 16.3h.01" />
+                </svg>
+              </span>
+              <span class="metric-label">Errors</span>
+              <strong id="errorCount" class="metric-value mono">--</strong>
+            </div>
+
+            <div class="metric-tile tone-warning">
+              <span class="metric-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3.8 2.9 20h18.2L12 3.8Z" />
+                  <path d="M12 10v4.2M12 17.2h.01" />
+                </svg>
+              </span>
+              <span class="metric-label">Warnings</span>
+              <strong id="warningCount" class="metric-value mono">--</strong>
+            </div>
+
+            <div class="metric-tile tone-suggestion">
+              <span class="metric-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3.4a6 6 0 0 0-3.4 10.9c.5.4.8 1 .9 1.6h5c.1-.6.4-1.2.9-1.6A6 6 0 0 0 12 3.4Z" />
+                  <path d="M9.6 18.9h4.8M10.6 21.4h2.8" />
+                </svg>
+              </span>
+              <span class="metric-label">Suggestions</span>
+              <strong id="suggestionCount" class="metric-value mono">--</strong>
+            </div>
+          </div>
+        </section>
+
+        <div class="workspace">
+          <section class="panel editor-dock">
+            <div class="panel-head">
+              <div class="panel-head-text">
+                <h2 class="panel-title">SQL Editor</h2>
+                <p class="hint">Name the schema, paste the DDL, then run the audit.</p>
+              </div>
+              <span class="badge">01 · Input</span>
+            </div>
+
+            <div class="field">
+              <label class="label" for="schemaName">Schema name</label>
+              <input id="schemaName" value="Student Database" autocomplete="off" />
+            </div>
+
+            <div class="field">
+              <span class="label" id="samplesLabel">Sample schemas</span>
+              <div class="samples" role="group" aria-labelledby="samplesLabel">
+                <button class="btn btn-ghost btn-sm" type="button" data-sample="1">Sample 1</button>
+                <button class="btn btn-ghost btn-sm" type="button" data-sample="2">Sample 2</button>
+                <button class="btn btn-ghost btn-sm" type="button" data-sample="3">Sample 3</button>
+                <button class="btn btn-ghost btn-sm" type="button" data-sample="4">Sample 4</button>
+                <button class="btn btn-ghost btn-sm" type="button" data-sample="5">Sample 5</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="sqlInput">CREATE TABLE SQL</label>
+              <textarea id="sqlInput" class="code-editor" spellcheck="false" placeholder="CREATE TABLE student ( … );&#10;&#10;CREATE TABLE department ( … );" aria-label="CREATE TABLE SQL input"></textarea>
+            </div>
+
+            <button id="reviewBtn" class="btn btn-primary btn-block" type="button">Review Schema</button>
+          </section>
+
+          <section class="panel output-dock">
+            <div class="panel-head">
+              <div class="panel-head-text">
+                <h2 class="panel-title">Validation Output</h2>
+                <p class="hint">Pipeline stages, schema map and the severity-ranked findings stream.</p>
+              </div>
+              <span class="badge">02 · Output</span>
+            </div>
+
+            <div class="steps" id="steps" aria-label="Review pipeline">
+              <span class="step">Validate</span>
+              <span class="step">Parse</span>
+              <span class="step">Keys</span>
+              <span class="step">Relations</span>
+              <span class="step">Score</span>
+              <span class="step">Explain</span>
+            </div>
+
+            <div id="visualization" class="visualization empty">
+              <div class="viz-empty">
+                <span class="viz-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4.5" width="18" height="15" rx="1.5" />
+                    <path d="M3 10h18M9.5 10v9.5M14.5 14h3.5M14.5 17h3.5" />
+                  </svg>
+                </span>
+                <b>No schema mapped yet</b>
+                <span>Paste SQL in the editor and run <em>Review Schema</em> to draw tables, keys and relationships here.</span>
+              </div>
+            </div>
+
+            <h3 class="section-title">Findings stream</h3>
+            <div id="findings" class="findings stream">
+              <div class="empty">No review yet.</div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel explanation-panel">
+          <div class="panel-head">
+            <div class="panel-head-text">
+              <h2 class="panel-title">AI Tutor Explanation</h2>
+              <p class="hint">A student-friendly walkthrough of what the audit found and why it matters.</p>
+            </div>
+            <span id="aiMode" class="badge">Built-in AI Tutor</span>
+          </div>
+          <div id="explanation" class="explanation">
+            Run a review to see a student-friendly explanation.
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================== II · TABLE DESIGNER =========================== -->
+      <section class="tab-panel" id="tab-designer">
+        <div class="studio-grid grid-sql">
+          <section class="panel studio-canvas">
+            <div class="panel-head">
+              <div class="panel-head-text">
+                <h2 class="panel-title">Table Canvas</h2>
+                <p class="hint">Add columns, mark the primary key, pick data types and link foreign keys — the SQL writes itself.</p>
+              </div>
+              <span class="badge">Blueprint</span>
+            </div>
+
+            <div class="field">
+              <label class="label" for="dtName">Table name</label>
+              <input id="dtName" placeholder="e.g. student" autocomplete="off" />
+            </div>
+
+            <div class="dt-scroll">
+              <div class="cols-head" aria-hidden="true">
+                <span>Column</span>
+                <span>Type</span>
+                <span title="Primary key">PK</span>
+                <span title="Not null">NN</span>
+                <span title="Unique">UQ</span>
+                <span>Foreign key →</span>
+                <span></span>
+              </div>
+              <div id="dtColumns" class="dt-columns"></div>
+            </div>
+
+            <div class="studio-actions">
+              <button id="dtAddColumn" class="btn btn-ghost" type="button">Add Column</button>
+              <button id="dtAddTable" class="btn btn-primary" type="button">Add Table</button>
+            </div>
+          </section>
+
+          <aside class="studio-aside">
+            <section class="panel">
+              <div class="panel-head">
+                <div class="panel-head-text">
+                  <h2 class="panel-title">Designed Tables</h2>
+                  <p class="hint">The schema you are assembling.</p>
+                </div>
+                <span id="dtCount" class="badge">0 tables</span>
+              </div>
+              <div id="dtTableList" class="dt-table-list">
+                <div class="empty">No tables designed yet.</div>
+              </div>
+            </section>
+
+            <section class="panel sql-dock">
+              <div class="panel-head">
+                <div class="panel-head-text">
+                  <h2 class="panel-title">Generated SQL</h2>
+                  <p class="hint">Copy it out or push it straight into the reviewer.</p>
+                </div>
+                <span class="chip">read-only</span>
+              </div>
+              <textarea id="dtSql" class="sql-preview code-editor" spellcheck="false" readonly placeholder="Your CREATE TABLE statements will appear here…" aria-label="Generated SQL"></textarea>
+              <div class="studio-actions">
+                <button id="dtCopy" class="btn btn-ghost btn-sm" type="button">Copy SQL</button>
+                <button id="dtSend" class="btn btn-primary btn-sm" type="button">Send to Review Editor</button>
+                <button id="dtClear" class="btn btn-ghost btn-sm" type="button">Clear All</button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <!-- =============================== III · QUIZ =============================== -->
+      <section class="tab-panel" id="tab-quiz">
+        <div class="arena">
+          <div class="stage">
+            <section class="panel" id="quizSetupPanel">
+              <div class="panel-head">
+                <div class="panel-head-text">
+                  <h2 class="panel-title">Quiz Setup</h2>
+                  <p class="hint">Pick a topic, difficulty and length — the drill handles the rest.</p>
+                </div>
+                <span class="badge">Drill</span>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label class="label" for="quizName">Your name</label>
+                  <input id="quizName" placeholder="e.g. Ananya" autocomplete="off" />
+                </div>
+                <div class="field">
+                  <label class="label" for="quizTopic">Topic</label>
+                  <input id="quizTopic" list="topicOptions" placeholder="DBMS" autocomplete="off" />
+                  <datalist id="topicOptions">
+                    <option value="DBMS (Database Management Systems)"></option>
+                    <option value="Normalization"></option>
+                    <option value="SQL Queries"></option>
+                    <option value="ER Model"></option>
+                    <option value="Transactions &amp; Concurrency"></option>
+                    <option value="Indexing and B+ Trees"></option>
+                  </datalist>
+                </div>
+              </div>
+
+              <div class="field">
+                <span class="label" id="difficultyLabel">Difficulty</span>
+                <div class="segmented" id="quizDifficulty" role="group" aria-labelledby="difficultyLabel">
+                  <button data-level="easy" class="active" type="button">Easy</button>
+                  <button data-level="medium" type="button">Medium</button>
+                  <button data-level="hard" type="button">Hard</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="quizCount">Number of questions</label>
+                <input id="quizCount" type="number" min="1" max="20" value="5" />
+              </div>
+
+              <button id="quizStart" class="btn btn-primary btn-block" type="button">Start Quiz</button>
+              <p class="hint" id="quizSourceHint"></p>
+            </section>
+
+            <section class="panel" id="quizRunPanel" hidden>
+              <div class="panel-head">
+                <h2 class="panel-title" id="quizProgress">Question 1 of 5</h2>
+                <span id="quizScoreLive" class="badge">Score: 0</span>
+              </div>
+
+              <div class="rail"><div id="quizProgressBar" class="rail-fill"></div></div>
+
+              <div class="quiz-meta">
+                <span id="quizTopicTag" class="chip"></span>
+                <span id="quizDifficultyTag" class="chip"></span>
+              </div>
+
+              <h3 id="quizQuestion" class="quiz-question"></h3>
+              <div id="quizOptions" class="quiz-options"></div>
+
+              <div id="quizFeedback" class="quiz-feedback" hidden></div>
+
+              <div class="quiz-actions">
+                <button id="quizNext" class="btn btn-primary" type="button" hidden>Next Question →</button>
+                <button id="quizSubmit" class="btn btn-primary" type="button" hidden>Submit Quiz</button>
+                <button id="quizQuit" class="btn btn-ghost" type="button">Quit</button>
+              </div>
+            </section>
+
+            <section class="panel" id="quizResultPanel" hidden>
+              <div class="panel-head">
+                <div class="panel-head-text">
+                  <h2 class="panel-title">Scoreboard</h2>
+                  <p class="hint">Attempt summary and per-question review.</p>
+                </div>
+                <span class="badge">Result</span>
+              </div>
+              <div id="quizResult" class="quiz-result"></div>
+              <div class="quiz-actions">
+                <button id="quizRetry" class="btn btn-primary" type="button">Play Again</button>
+              </div>
+            </section>
+          </div>
+
+          <aside class="rail-col">
+            <section class="panel leaderboard-panel">
+              <div class="panel-head">
+                <div class="panel-head-text">
+                  <h2 class="panel-title">Leaderboard</h2>
+                  <p class="hint">Top 10 attempts by percentage.</p>
+                </div>
+                <button id="leaderRefresh" class="btn btn-ghost btn-sm" type="button">Refresh</button>
+              </div>
+              <div id="leaderboard" class="leaderboard">
+                <div class="empty">No scores yet — be the first!</div>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ========================== IV · EXAM QUESTIONS ========================== -->
+      <section class="tab-panel" id="tab-exam">
+        <section class="panel filter-bar">
+          <div class="filter-fields">
+            <div class="field">
+              <label class="label" for="examFilter">Exam</label>
+              <select id="examFilter"><option value="all">All exams</option></select>
+            </div>
+            <div class="field">
+              <label class="label" for="examTopicFilter">Topic</label>
+              <select id="examTopicFilter"><option value="all">All topics</option></select>
+            </div>
+            <div class="field">
+              <label class="label" for="examLimit">Limit</label>
+              <select id="examLimit">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button id="examLoad" class="btn btn-primary" type="button">Load Questions</button>
+            <button id="examGenerate" class="btn btn-ghost" type="button">Generate with AI</button>
+          </div>
+        </section>
+
+        <div id="examList" class="feed">
+          <div class="empty">Click <b>Load Questions</b> to view the question bank.</div>
+        </div>
+
+        <p class="disclaimer">
+          Note: the built-in bank contains representative practice questions. Always
+          verify exact wording and answer keys against the official question papers.
+        </p>
+      </section>
+
+      <!-- ===================== V · LEARN, DOWNLOAD & HELP ===================== -->
+      <section class="tab-panel" id="tab-learn">
+
+        <!-- -------------------------------- LEARN -------------------------------- -->
+        <section class="panel" id="learnPanel">
+          <div class="panel-head">
+            <div class="panel-head-text">
+              <p class="eyebrow">Learn</p>
+              <h2 class="panel-title">Working lessons</h2>
+              <p class="hint">
+                Short, self-contained explanations of the rules the reviewer checks
+                for. Open a lesson, read the reasoning, then send its example straight
+                into the Schema Review to watch the audit run.
+              </p>
+            </div>
+            <button id="lessonToggleAll" class="btn btn-ghost btn-sm" type="button">Expand all</button>
+          </div>
+
+          <div class="lesson-list" id="lessonList">
+
+            <details class="lesson">
+              <summary>
+                <span class="lesson-num" aria-hidden="true">1</span>
+                <span class="lesson-name">Primary keys and entity integrity</span>
+                <span class="lesson-tag">Keys</span>
+              </summary>
+              <div class="lesson-body">
+                <p>
+                  The primary key is the column — or the pair of columns — that
+                  identifies exactly one row. A table without one cannot be referenced
+                  by anything else, which is why the reviewer reports
+                  <b>Missing primary key</b> as a warning and drops the score.
+                </p>
+                <ul class="lesson-points">
+                  <li>A table has <b>one</b> primary key. It is implicitly unique and
+                      implicitly <span class="mono">NOT NULL</span>, so never write those
+                      two by hand.</li>
+                  <li>Prefer a narrow surrogate key (<span class="mono">id INT PRIMARY KEY</span>)
+                      over a wide natural key such as an email address — every child table
+                      has to store a copy of it.</li>
+                  <li>A composite key is correct when the pair really is the identity,
+                      for example <span class="mono">(student_id, course_id)</span> on an
+                      enrolment table.</li>
+                </ul>
+                <pre class="lesson-sql mono">CREATE TABLE student (
+  student_id INT PRIMARY KEY,
+  full_name VARCHAR(100) NOT NULL,
+  date_of_birth DATE
+);</pre>
+                <div class="lesson-actions">
+                  <button class="btn btn-ghost btn-sm lesson-open" type="button">Open in Reviewer</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="lesson">
+              <summary>
+                <span class="lesson-num" aria-hidden="true">2</span>
+                <span class="lesson-name">Foreign keys and referential integrity</span>
+                <span class="lesson-tag">Keys</span>
+              </summary>
+              <div class="lesson-body">
+                <p>
+                  A foreign key is a column that stores another table's primary key. It
+                  is what turns two independent lists of rows into a relationship, and it
+                  is the constraint the reviewer validates hardest: an invalid reference
+                  is reported as an <b>error</b>, not a hint.
+                </p>
+                <ul class="lesson-points">
+                  <li>The referenced column must exist in the same script and must itself
+                      be a primary key or <span class="mono">UNIQUE</span>.</li>
+                  <li>The two types must match — <span class="mono">INT</span> to
+                      <span class="mono">INT</span>, never <span class="mono">INT</span> to
+                      <span class="mono">VARCHAR</span>.</li>
+                  <li>Define the parent table before the child that points at it; the
+                      reviewer reads one script at a time and cannot see across files.</li>
+                </ul>
+                <pre class="lesson-sql mono">CREATE TABLE department (
+  department_id INT PRIMARY KEY,
+  department_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE student (
+  student_id INT PRIMARY KEY,
+  full_name VARCHAR(100) NOT NULL,
+  department_id INT NOT NULL,
+  FOREIGN KEY (department_id) REFERENCES department(department_id)
+);</pre>
+                <div class="lesson-actions">
+                  <button class="btn btn-ghost btn-sm lesson-open" type="button">Open in Reviewer</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="lesson">
+              <summary>
+                <span class="lesson-num" aria-hidden="true">3</span>
+                <span class="lesson-name">NOT NULL, UNIQUE and column rules</span>
+                <span class="lesson-tag">Constraints</span>
+              </summary>
+              <div class="lesson-body">
+                <p>
+                  Constraints are the cheapest documentation you will ever write: they
+                  are enforced by the database instead of by hope.
+                </p>
+                <ul class="lesson-points">
+                  <li><span class="mono">NOT NULL</span> — a value is required for every
+                      row. Ask of each column: "would a missing value be a bug?"</li>
+                  <li><span class="mono">UNIQUE</span> — no two rows may share a value.
+                      Most engines let several <span class="mono">NULL</span>s through
+                      anyway, since unknowns are not equal to each other.</li>
+                  <li><span class="mono">CHECK</span> — a rule over a value, such as
+                      <span class="mono">CHECK (marks BETWEEN 0 AND 100)</span>.</li>
+                  <li>A nullable column is a decision, not a default. The reviewer flags
+                      the ones that look accidental.</li>
+                </ul>
+                <pre class="lesson-sql mono">CREATE TABLE account (
+  account_id INT PRIMARY KEY,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  display_name VARCHAR(80) NOT NULL,
+  is_active BOOLEAN NOT NULL
+);</pre>
+                <div class="lesson-actions">
+                  <button class="btn btn-ghost btn-sm lesson-open" type="button">Open in Reviewer</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="lesson">
+              <summary>
+                <span class="lesson-num" aria-hidden="true">4</span>
+                <span class="lesson-name">Normalisation: 1NF to 3NF and BCNF</span>
+                <span class="lesson-tag">Normalisation</span>
+              </summary>
+              <div class="lesson-body">
+                <p>
+                  Normalisation removes the redundancy that makes updates dangerous: if
+                  the same fact is stored twice, one day only one copy gets corrected.
+                </p>
+                <ul class="lesson-points">
+                  <li><b>1NF</b> — one value per cell. A
+                      <span class="mono">phone_numbers</span> column holding
+                      <span class="mono">'555-1, 555-2'</span> is not a value, it is a list.</li>
+                  <li><b>2NF</b> — no non-key column depends on only <i>part</i> of a
+                      composite key.</li>
+                  <li><b>3NF</b> — no non-key column depends on another non-key column.
+                      Storing <span class="mono">building</span> beside
+                      <span class="mono">department_id</span> is the classic violation,
+                      because the building belongs to the department.</li>
+                  <li><b>BCNF</b> — every determinant is a candidate key. It only bites
+                      once a table has several overlapping candidate keys.</li>
+                </ul>
+                <p class="lesson-note">
+                  The fix is almost always the same: move the dependent facts into their
+                  own table and reference it.
+                </p>
+                <pre class="lesson-sql mono">CREATE TABLE department (
+  department_id INT PRIMARY KEY,
+  department_name VARCHAR(100) NOT NULL UNIQUE,
+  building VARCHAR(60) NOT NULL
+);
+
+CREATE TABLE lecturer (
+  lecturer_id INT PRIMARY KEY,
+  lecturer_name VARCHAR(100) NOT NULL,
+  department_id INT NOT NULL,
+  FOREIGN KEY (department_id) REFERENCES department(department_id)
+);</pre>
+                <div class="lesson-actions">
+                  <button class="btn btn-ghost btn-sm lesson-open" type="button">Open in Reviewer</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="lesson">
+              <summary>
+                <span class="lesson-num" aria-hidden="true">5</span>
+                <span class="lesson-name">Many-to-many needs a junction table</span>
+                <span class="lesson-tag">Relationships</span>
+              </summary>
+              <div class="lesson-body">
+                <p>
+                  Two tables can express a relationship directly only when it is
+                  one-to-many. Students take many courses, and a course is taken by many
+                  students, so neither table can hold the other's key.
+                </p>
+                <ul class="lesson-points">
+                  <li>The junction table's primary key is normally the <b>pair</b> of
+                      foreign keys, which also stops the same enrolment being recorded
+                      twice.</li>
+                  <li>Attributes of the relationship itself — the enrolment date, the
+                      grade — belong on the junction table, not on either side.</li>
+                  <li>A junction table is also the right place to hang extra keys when a
+                      relationship becomes many-to-many over time.</li>
+                </ul>
+                <pre class="lesson-sql mono">CREATE TABLE student (
+  student_id INT PRIMARY KEY,
+  full_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE course (
+  course_id INT PRIMARY KEY,
+  course_title VARCHAR(120) NOT NULL,
+  credit_hours INT NOT NULL
+);
+
+CREATE TABLE enrolment (
+  student_id INT NOT NULL,
+  course_id INT NOT NULL,
+  enrolled_on DATE NOT NULL,
+  PRIMARY KEY (student_id, course_id),
+  FOREIGN KEY (student_id) REFERENCES student(student_id),
+  FOREIGN KEY (course_id) REFERENCES course(course_id)
+);</pre>
+                <div class="lesson-actions">
+                  <button class="btn btn-ghost btn-sm lesson-open" type="button">Open in Reviewer</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="lesson">
+              <summary>
+                <span class="lesson-num" aria-hidden="true">6</span>
+                <span class="lesson-name">Naming conventions that survive review</span>
+                <span class="lesson-tag">Conventions</span>
+              </summary>
+              <div class="lesson-body">
+                <p>
+                  Names are read far more often than they are written, and the reviewer
+                  reads them literally: inconsistent suffixes and reserved words show up
+                  as suggestions.
+                </p>
+                <ul class="lesson-points">
+                  <li><span class="mono">snake_case</span>, and singular nouns for
+                      tables — <span class="mono">student</span>, not
+                      <span class="mono">Students</span>.</li>
+                  <li>The same column keeps the same name everywhere. Pick
+                      <span class="mono">department_id</span> and use it in every table
+                      that references a department.</li>
+                  <li>Booleans read as assertions: <span class="mono">is_active</span>,
+                      <span class="mono">has_paid</span>.</li>
+                  <li>Avoid reserved words — <span class="mono">order</span>,
+                      <span class="mono">user</span>, <span class="mono">group</span> —
+                      they need quoting for the rest of the schema's life.</li>
+                </ul>
+                <pre class="lesson-sql mono">CREATE TABLE customer (
+  customer_id INT PRIMARY KEY,
+  customer_name VARCHAR(120) NOT NULL
+);
+
+CREATE TABLE purchase_order (
+  order_id INT PRIMARY KEY,
+  placed_on DATE NOT NULL,
+  is_paid BOOLEAN NOT NULL,
+  customer_id INT NOT NULL,
+  FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+);</pre>
+                <div class="lesson-actions">
+                  <button class="btn btn-ghost btn-sm lesson-open" type="button">Open in Reviewer</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="lesson">
+              <summary>
+                <span class="lesson-num" aria-hidden="true">7</span>
+                <span class="lesson-name">Indexes, joins and foreign-key speed</span>
+                <span class="lesson-tag">Performance</span>
+              </summary>
+              <div class="lesson-body">
+                <p>
+                  A foreign key guarantees correctness, not speed. Most engines index the
+                  primary key automatically but leave a plain foreign-key column
+                  unindexed, so every join and every parent delete scans the child table.
+                </p>
+                <ul class="lesson-points">
+                  <li>Index the columns you join and filter on habitually, not every
+                      column that exists.</li>
+                  <li>Column order in a composite index matters:
+                      <span class="mono">(student_id, course_id)</span> serves lookups on
+                      <span class="mono">student_id</span> alone, but not on
+                      <span class="mono">course_id</span> alone.</li>
+                  <li>Indexes are not free — each one costs space and slows down inserts,
+                      updates and deletes.</li>
+                </ul>
+                <pre class="lesson-sql mono">CREATE TABLE customer (
+  customer_id INT PRIMARY KEY,
+  customer_name VARCHAR(120) NOT NULL
+);
+
+CREATE TABLE invoice (
+  invoice_id INT PRIMARY KEY,
+  customer_id INT NOT NULL,
+  issued_on DATE NOT NULL,
+  total DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+);
+
+-- the reviewer audits structure, not indexes; add them separately
+CREATE INDEX idx_invoice_customer ON invoice (customer_id);</pre>
+                <div class="lesson-actions">
+                  <button class="btn btn-ghost btn-sm lesson-open" type="button">Open in Reviewer</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="lesson">
+              <summary>
+                <span class="lesson-num" aria-hidden="true">8</span>
+                <span class="lesson-name">Reading a review report</span>
+                <span class="lesson-tag">Workflow</span>
+              </summary>
+              <div class="lesson-body">
+                <p>
+                  The report is ranked by severity, and the score is a weighted summary
+                  rather than a count. This example is deliberately imperfect — run it
+                  and read what comes back.
+                </p>
+                <ul class="lesson-points">
+                  <li><span class="sev-label">Error</span> something is broken and will
+                      fail — an invalid foreign key, for instance.</li>
+                  <li><span class="sev-label">Warning</span> a rule is missing that you
+                      will regret later, such as a primary key.</li>
+                  <li><span class="sev-label">Suggestion</span> naming, nullable columns,
+                      possible redundancy.</li>
+                  <li><span class="sev-label">Passed</span> a check that succeeded, kept
+                      so you can see what was verified.</li>
+                </ul>
+                <pre class="lesson-sql mono">CREATE TABLE student (
+  student_id INT PRIMARY KEY,
+  full_name VARCHAR(100),
+  department_id INT,
+  email VARCHAR(150) UNIQUE
+);</pre>
+                <div class="lesson-actions">
+                  <button class="btn btn-ghost btn-sm lesson-open" type="button">Open in Reviewer</button>
+                </div>
+              </div>
+            </details>
+
+          </div>
+        </section>
+
+        <!-- ------------------------------ DOWNLOAD ------------------------------ -->
+        <section class="panel" id="downloadPanel">
+          <div class="panel-head">
+            <div class="panel-head-text">
+              <p class="eyebrow">Download</p>
+              <h2 class="panel-title">Take your work with you</h2>
+              <p class="hint">
+                Every export is assembled in your browser from what is currently on
+                screen — nothing is uploaded and nothing is stored. Items grey out until
+                there is something to save.
+              </p>
+            </div>
+          </div>
+
+          <div class="dl-grid">
+            <div class="dl-item">
+              <div class="dl-item-head">
+                <b>Review report</b>
+                <span class="dl-fmt mono">.md</span>
+              </div>
+              <p class="dl-desc">Score, severities, findings with their fixes, and the tutor's explanation.</p>
+              <p class="dl-meta" data-meta="review">Nothing yet — run a review first.</p>
+              <button class="btn btn-ghost btn-sm" type="button" data-export="review-md" disabled>Download</button>
+            </div>
+
+            <div class="dl-item">
+              <div class="dl-item-head">
+                <b>Review report</b>
+                <span class="dl-fmt mono">.json</span>
+              </div>
+              <p class="dl-desc">The same audit as raw structured data, for scripts and spreadsheets.</p>
+              <p class="dl-meta" data-meta="review">Nothing yet — run a review first.</p>
+              <button class="btn btn-ghost btn-sm" type="button" data-export="review-json" disabled>Download</button>
+            </div>
+
+            <div class="dl-item">
+              <div class="dl-item-head">
+                <b>Designed schema</b>
+                <span class="dl-fmt mono">.sql</span>
+              </div>
+              <p class="dl-desc">Every table currently in the Table Designer, as runnable <span class="mono">CREATE TABLE</span> statements.</p>
+              <p class="dl-meta" data-meta="designer">The designer is empty.</p>
+              <button class="btn btn-ghost btn-sm" type="button" data-export="designer-sql" disabled>Download</button>
+            </div>
+
+            <div class="dl-item">
+              <div class="dl-item-head">
+                <b>Quiz score sheet</b>
+                <span class="dl-fmt mono">.csv</span>
+              </div>
+              <p class="dl-desc">Your last attempt question by question, plus the top ten on the leaderboard.</p>
+              <p class="dl-meta" data-meta="quiz">No completed quiz yet.</p>
+              <button class="btn btn-ghost btn-sm" type="button" data-export="quiz-csv" disabled>Download</button>
+            </div>
+
+            <div class="dl-item">
+              <div class="dl-item-head">
+                <b>Exam question set</b>
+                <span class="dl-fmt mono">.csv</span>
+              </div>
+              <p class="dl-desc">The questions currently loaded in the Exam archive, with options, answer and citation.</p>
+              <p class="dl-meta" data-meta="exam">No questions loaded.</p>
+              <button class="btn btn-ghost btn-sm" type="button" data-export="exam-csv" disabled>Download</button>
+            </div>
+
+            <div class="dl-item">
+              <div class="dl-item-head">
+                <b>Study notes</b>
+                <span class="dl-fmt mono">.md</span>
+              </div>
+              <p class="dl-desc">All eight lessons above, with their examples and points, as one printable study sheet.</p>
+              <p class="dl-meta" data-meta="lessons">8 lessons ready.</p>
+              <button class="btn btn-ghost btn-sm" type="button" data-export="lessons-md">Download</button>
+            </div>
+          </div>
+
+          <p class="disclaimer">
+            Citation note: the exam bank holds representative practice questions. Always
+            check wording and answer keys against the official question papers before
+            relying on them.
+          </p>
+        </section>
+
+        <!-- -------------------------------- HELP -------------------------------- -->
+        <section class="panel" id="helpPanel">
+          <div class="panel-head">
+            <div class="panel-head-text">
+              <p class="eyebrow">Help</p>
+              <h2 class="panel-title">Quick start, questions and fixes</h2>
+              <p class="hint">Four steps cover the whole application.</p>
+            </div>
+          </div>
+
+          <ol class="help-steps">
+            <li>
+              <b>Review.</b> Paste <span class="mono">CREATE TABLE</span> statements — or
+              press a sample chip — and choose <b>Review Schema</b>. Findings come back
+              ranked, with the score ring filling above them.
+            </li>
+            <li>
+              <b>Design.</b> In the Table Designer, add columns and tick
+              <b>PK</b> / <b>NN</b> / <b>UQ</b>, or point a foreign key at another table.
+              The SQL writes itself; <b>Send to Review Editor</b> hands it to section I.
+            </li>
+            <li>
+              <b>Drill.</b> The Quiz asks for a level and a question count, then marks one
+              question at a time. The Exam archive serves tagged past-paper style items —
+              reveal a solution only when you want to see it.
+            </li>
+            <li>
+              <b>Keep it.</b> Export anything from the Download panel above, and reopen
+              earlier audits from <b>History</b> in the command bar.
+            </li>
+          </ol>
+
+          <div class="faq-list">
+            <details class="faq">
+              <summary>Where do I put my Groq API key?</summary>
+              <p>
+                Copy <span class="mono">backend\.env.example</span> to
+                <span class="mono">backend\.env</span>, set
+                <span class="mono">GROQ_API_KEY=…</span> and restart the server —
+                environment variables are read once, at start-up. One key covers every
+                Groq model; there is no separate key per model. Leave it empty and the
+                whole application still works, on the built-in banks.
+              </p>
+            </details>
+
+            <details class="faq">
+              <summary>Which model actually answers?</summary>
+              <p>
+                <span class="mono">GROQ_MODEL_PRIMARY</span> is tried first, then
+                <span class="mono">GROQ_MODEL_SECONDARY</span> as automatic failover. If
+                both are unavailable the curated offline bank answers instead, and the
+                source on the card reads <span class="mono">bank</span> rather than
+                <span class="mono">ai</span>.
+              </p>
+            </details>
+
+            <details class="faq">
+              <summary>What does the score measure?</summary>
+              <p>
+                A weighted summary of the audit, not a count of findings: errors cost
+                most, warnings next, suggestions least, and passing checks are recorded
+                without adding points. Two schemas with the same number of findings can
+                therefore score differently.
+              </p>
+            </details>
+
+            <details class="faq">
+              <summary>A foreign key is reported as invalid. Why?</summary>
+              <p>
+                The referenced table must be defined <b>in the same script</b> and the
+                referenced column must be that table's primary key or
+                <span class="mono">UNIQUE</span>. Check the spelling on both sides and
+                make sure the data types match.
+              </p>
+            </details>
+
+            <details class="faq">
+              <summary>Why did my history or the leaderboard empty itself?</summary>
+              <p>
+                On a free hosting tier the disk is ephemeral, so every redeploy starts
+                from an empty database. Point the
+                <span class="mono">SCHEMAWISE_DB</span> environment variable at a mounted
+                disk to keep it between deploys.
+              </p>
+            </details>
+
+            <details class="faq">
+              <summary>Can I print this, or hand it in?</summary>
+              <p>
+                Yes. <b>Print</b> (<span class="mono">Ctrl+P</span>) forces a flat,
+                ink-on-white document at 11pt and removes the application furniture, so
+                the page you are reading becomes the handout. Lessons that are closed
+                stay closed — open them first, or take the Study notes export above.
+              </p>
+            </details>
+          </div>
+
+          <p class="disclaimer">
+            <span data-project-name>SchemaWise AI</span> · FastAPI service with a
+            dependency-free front end. Review, quiz and exam content is available
+            offline; the AI tutor is optional.
+          </p>
+        </section>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ============================= HISTORY DRAWER ============================= -->
+  <aside id="historyDrawer" class="drawer" aria-label="Review history">
+    <div class="drawer-head">
+      <div class="panel-head-text">
+        <h2 class="panel-title">Review History</h2>
+        <p class="hint">Click an entry to reload it into the review section.</p>
+      </div>
+      <button id="closeHistory" class="icon-btn" type="button" aria-label="Close history">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      </button>
+    </div>
+    <div id="historyList"></div>
+  </aside>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
